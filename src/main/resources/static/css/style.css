@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Galindo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Galindo&family=Inter:wght@100..900&display=swap');
+  :root {
+    --body-font: 'Inter', sans-serif;
+    --header-font: 'Galindo', sans-serif;
+}
+html, body {
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling */
+    background: linear-gradient(
+            245.59deg,
+            #F5F5F5 30%,
+            #A6B2DD 50%,
+            #354069 100%
+    );
+}
+body{
+    overflow: auto;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.content {
+    flex: 1;
+}
+.content-grid{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+.left {
+    display: flex;
+    flex-direction: column; /* Align items vertically */
+    justify-content: center; /* Center contents horizontally */
+    align-items: center; /* Center contents vertically */
+    padding: 30px;
+
+}
+.welcome {
+    font-family: var(--body-font);
+    font-size: 20px;
+    font-weight: bold;
+}
+.piggy {
+    font-family: var(--header-font);
+    font-size: 60px;
+    color: #D29B54;
+    filter: drop-shadow(0 1px black);
+}
+.info {
+    font-family: var(--body-font);
+    font-size: 16px;
+    padding: 15px;
+}
+img {
+    margin: 10px 0;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+    animation: float 3s ease-out infinite;
+}
+.ease-in{
+    animation: float 3s ease-in infinite;
+}
+@keyframes float {
+    50% {
+        transform: translateY(20px);
+    }
+}

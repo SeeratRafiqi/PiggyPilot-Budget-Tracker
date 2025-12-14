@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+:root {
+    --body-font: 'Inter', sans-serif;
+    --navbar-font: 'Poppins', sans-serif;
+    --background-color: #A6B2DD;
+    --purple: #4455A2;
+    --light-purple: #ECECF8;
+    --pink: #FCDDEC;
+    --gray: #D9D9D9;
+    --shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.3); /* Shadow only at the bottom */
+}
+body {
+    font-family: var(--body-font);
+    background-color: var(--background-color);
+}
+.container {
+    display: flex;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    justify-content: center;
+    align-items: center;
+}
+.content {
+    flex: 1;
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.navbar {
+    font-family: var(--navbar-font);
+    display: flex;
+}
+.navbar, .logo{
+    flex: 1;
+}
+.logo img {
+    width: 50px;
+    height: 50px;
+}
+.tab {
+    margin: 0 10px;
+    padding: 12px 30px;
+    border-radius: 30px;
+    cursor: pointer;
+    color: black;
+    background-color: white;
+}
+.tab.active, .tab:hover {
+    background-color: var(--pink);
+}
+.budget-section {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    text-align: center;
+}
+.box {
+    color: var(--purple);
+    background-color: white;
+    padding: 10px;
+    font-weight: 500;
+    border-radius: 15px;
+    border: 1px solid var(--gray);
+    box-shadow: var(--shadow);
+}
+.btn {
+    color: black;
+    background-color: var(--light-purple);
+    padding: 10px 20px;
+    margin-left: 15px;
+    cursor: pointer;
+}
+.btn:hover {
+    background-color: #d4d7e8;
+}
+.table-container {
+    /*background-color: #FCDDEC;*/
+    margin-top: 10px;
+    max-height: 550px;
+    min-height: 550px;
+    border-radius: 10px;
+    position: relative;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px 12px;
+    text-align: center;
+}
+td {
+    border: 1px solid #ddd;
+}
+thead th {
+    /*background-color: #f2f2f2; !* Header background color *!*/
+    padding-bottom: 20px;
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+.table-container-body {
+    max-height: 450px; /* Based on the available space minus the table header height */
+    min-height: 450px;
+    overflow-y: auto;
+}
+.left-container, .top-row, .bottom-row {
+    border-radius: 10px;
+    background-color: var(--light-purple);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray);
+    padding: 20px;
+    margin: 10px;
+}
+.right-container {
+    display: grid;
+    grid-template-rows: auto auto;
+}
+.header {
+    display: flex;
+    gap: 30px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.btn-row {
+    flex: 2;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    justify-items: center;
+    gap: 10px; /* Gap between the right divs */
+}
+.btn {
+    font-size: 16px;
+    font-weight: 500;
+}
+.info {
+    padding: 10px;
+}
+.form {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+.form select {
+    padding: 5px;
+    text-align: center;
+    color: var(--purple);
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 10px;
+    border-color: var(--gray);
+    appearance: auto;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.form select option:checked {
+    background-color: var(--light-purple); /* Example selected color */
+}
+
+.bottom-row {
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.piggy-bank {
+    position: relative;
+    width: 200px;
+    height: 250px;
+    overflow: hidden;
+}
+.piggy-bank .coin {
+    width: 100px;
+    height: auto;
+    border-radius: 50%;
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    animation: dropCoin 2s ease-in-out infinite;
+    z-index: 0; /* Ensure coin is behind piggy bank */
+}
+.piggy-bank .coin img {
+    width: 100%; /* Ensure the coin image fills its container */
+}
+.piggy-bank .coin span {
+    position: absolute;
+    font-size: 30px;
+    font-weight: 700;
+}
+.piggy-bank .pig {
+    position: relative;
+    z-index: 1; /* Ensure piggy bank is above the coin */
+    top: 100px;
+}
+.piggy-bank .pig img {
+    width: 100%; /* Ensure the image fills its container */
+}
+@keyframes dropCoin {
+    0% {
+        top: -60px;
+        opacity: 0;
+    }
+    50% {
+        top: 50px;
+        opacity: 1;
+    }
+    75% {
+        top: 80px;
+        opacity: 1;
+    }
+    100% {
+        top: 100px;
+        opacity: 0;
+    }
+}
+#pieChart {
+    width: 80%; /* Adjust the width of the pie chart canvas */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 300px; /* Limit maximum width */
+}

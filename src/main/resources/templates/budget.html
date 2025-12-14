@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>User Profile</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/budgetStyle.css}"/>
+</head>
+<body>
+<!-- container-->
+<div class="container">
+    <!-- inside the container is the content-->
+    <div class="content">
+
+        <!--    Alert    -->
+        <div th:if="${param.success1}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                Update successful !!!
+            </div>
+        </div>
+        <div th:if="${param.success2}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                Budget successfully deleted !!!
+            </div>
+        </div>
+        <div th:if="${param.success3}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                New Budget created !!!
+            </div>
+        </div>
+
+        <!--    Navigation Bar    -->
+        <div class="navbar">
+            <div class="logo">
+                <img src="/images/logo.png" alt="Logo" data-url="/user/" onclick="navigateToDashboard(this)">
+            </div>
+            <div class="tab" data-url="/user/profile" onclick="navigateToTab(this)">Profile</div>
+            <div class="tab" data-url="/user/budget" onclick="navigateToTab(this)">Budget</div>
+            <div class="tab" data-url="/user/transaction" onclick="navigateToTab(this)">Transaction</div>
+        </div>
+
+        <!--    Profile section    -->
+        <div class="budget-section">
+            <div class="left-container">
+                <p class="box" style="font-size: 18px;">Budgets</p>
+                <div class="header">
+                    <!--       Drop down       -->
+                    <div class="form">
+                        <form class="box" method="get" action="#">
+                            <select name="month" id="monthSelect">
+                                <option value="00">All</option>
+                                <option value="01">January</option>
+                                <option value="02">February</option>
+                                <option value="03">March</option>
+                                <option value="04">April</option>
+                                <option value="05">May</option>
+                                <option value="06" selected>June</option>
+                                <option value="07">July</option>
+                                <option value="08">August</option>
+                                <option value="09">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </form>
+                    </div>
+                    <!--       Buttons       -->
+                    <div class="btn-row" id="actionButtons" style="display: none;">
+                        <div class="box">Add
+                            <span><i id="addNewGroupBtn"
+                                     class="box btn fa-solid fa-pen-to-square"></i></span>
+                        </div>
+                        <div class="box">Update
+                            <span><i id="updateGroupBtn"
+                                     class="box btn fa-solid fa-pen-to-square"></i></span>
+                        </div>
+                        <div class="box">Delete
+                            <span><i id="deleteGroupBtn"
+                                     class="box btn fa-solid fa-pen-to-square"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="box table-container" style="color:black; font-weight: 300">
+                    <table><!--     Table 1 - Headers      -->
+                        <thead>
+                        <tr>
+                            <th style="width: 5%;">ID</th>
+                            <th style="width: 18%;">Category</th>
+                            <th style="width: 18%;">Start Date</th>
+                            <th style="width: 17%;">End Date</th>
+                            <th style="width: 17%;">Budget Amount</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <div class="table-container-body">
+                        <table> <!--     Table 2 - body/table data      -->
+                            <tbody id="groupTableBody">
+                            <!-- Rows will be inserted here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-container">
+                <div class="top-row">
+                    <p class="box" style="font-size: 18px;">Chart</p>
+                    <div class="box">
+
+                        <!-- Add a canvas element for the chart -->
+                        <canvas id="pieChart" width="100" height="100"></canvas>
+
+                    </div>
+                </div>
+
+                <div class="top-row">
+                    <p class="box" style="font-size: 18px;">Savings</p>
+                    <div class="bottom-row">
+
+                        <!-- Piggy Bank Section -->
+                        <div class="piggy-bank">
+                            <div class="coin" id="coin">
+                                <img src="/images/coin-drop.png" alt="coin">
+                                <span id="remaining-amount">0</span>
+                            </div>
+                            <div class="pig">
+                                <img src="/images/piggybank.png" class="img-fluid" alt="piggybank">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Render totamount into a hidden span -->
+<span id="totalAmount" th:text="${user.totamount}" style="display: none;"></span>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // Highlight the current tab based on URL
+        let currentUrl = window.location.href;
+        document.querySelectorAll('.tab').forEach(tab => {
+            if (currentUrl.includes(tab.getAttribute('data-url'))) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
+            }
+        });
+
+        const monthSelect = document.getElementById('monthSelect');
+        const actionButtons = document.getElementById('actionButtons');
+
+        // Use totamount from hidden span
+        const totalAmount = parseFloat(document.getElementById('totalAmount').textContent.trim());
+
+        const ctx = document.getElementById('pieChart').getContext('2d');
+        let pieChart;
+        <!-- pie chart-->
+        function renderPieChart(categories, percentages) {
+            if (pieChart) {
+                pieChart.destroy();
+            }
+
+            pieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        label: 'Category Distribution',
+                        data: percentages,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    return `${label}: ${value.toFixed(2)}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function fetchAndDisplayGroups(month) {
+            console.log('Fetching data for month:', month); // Debug
+            fetch(`/user/budget/category?month=${month}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Fetched data:', data); // Debug
+                    const tableBody = document.getElementById('groupTableBody');
+                    tableBody.innerHTML = ''; // Clear the existing table rows
+
+                    const categories = [];
+                    const amounts = [];
+                    let totalCategoryAmount = 0;
+
+                    if (data.length === 0) {
+                        // Display a message if no budgets are found
+                        const row = document.createElement('tr');
+                        row.innerHTML = `<td colspan="5" style="text-align: center;">No budgets</td>`;
+                        tableBody.appendChild(row);
+                    }
+                    if (data.length !== 0 || month === '06') {
+                        data.forEach((group) => {
+                            categories.push(group.category);
+                            amounts.push(group.bamount);
+                            totalCategoryAmount += group.bamount;
+
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td style="width: 2%;">${group.budgetId}</td>
+                                <td style="width: 22%;">${group.category}</td>
+                                <td style="width: 22%;">${group.startDate}</td>
+                                <td style="width: 22%;">${group.endDate}</td>
+                                <td style="width: 17%;">${group.bamount}</td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+
+                        if (month === '06') { // Only show buttons for June
+                            actionButtons.style.display = 'flex';
+                        } else {
+                            actionButtons.style.display = 'none';
+                        }
+
+                        const remainingAmount = totalAmount - totalCategoryAmount;
+                        document.getElementById('remaining-amount').textContent = remainingAmount;
+
+                        // Calculate percentages for the pie chart
+                        const percentages = amounts.map(amount => (amount / totalCategoryAmount) * 100);
+                        renderPieChart(categories, percentages);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error); // Debug
+                });
+        }
+
+        monthSelect.addEventListener('change', function () {
+            const selectedMonth = this.value;
+            fetchAndDisplayGroups(selectedMonth);
+        });
+
+        // Fetch and display groups for the initial selected month on page load
+        const initialMonth = monthSelect.value;
+        fetchAndDisplayGroups(initialMonth);
+
+        document.getElementById('addNewGroupBtn').addEventListener('click', function () {
+            window.location.href = '/user/budget/add';
+        });
+
+        document.getElementById('updateGroupBtn').addEventListener('click', function () {
+            window.location.href = '/user/budget/update';
+        });
+
+        document.getElementById('deleteGroupBtn').addEventListener('click', function () {
+            window.location.href = '/user/budget/delete';
+        });
+    });
+
+    function navigateToTab(element) {
+        const url = element.getAttribute('data-url');
+        window.location.href = url;
+    }
+
+    function navigateToDashboard(element) {
+        const url = element.getAttribute('data-url');
+        window.location.href = url;
+    }
+</script>
+
+</body>
+</html>
+
+

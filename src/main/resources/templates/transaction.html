@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>User Transaction</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+          integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+          crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css"
+          integrity="sha512-bYPO5jmStZ9WI2602V2zaivdAnbAhtfzmxnEGh9RwtlI00I9s8ulGe4oBa5XxiC6tCITJH/QG70jswBhbLkxPw=="
+          crossorigin="anonymous" />
+    <link rel="stylesheet" th:href="@{/css/transaction.css}">
+</head>
+<body>
+
+<div class="container">
+    <div class="content">
+
+        <!-- Alert -->
+        <div th:if="${param.success1}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                Update successful !!!
+            </div>
+        </div>
+        <div th:if="${param.success2}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                Transaction successfully deleted !!!
+            </div>
+        </div>
+        <div th:if="${param.success3}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                New Transaction created !!!
+            </div>
+        </div>
+        <div th:if="${param.error}">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                This transaction amount exceeds the budget amount
+            </div>
+        </div>
+
+
+        <div class="navbar">
+            <div class="logo">
+                <img src="/images/logo.png" alt="Logo" data-url="/user/" onclick="navigateToDashboard(this)">
+            </div>
+            <div class="tab" data-url="/user/profile" onclick="navigateToTab(this)">Profile</div>
+            <div class="tab" data-url="/user/budget" onclick="navigateToTab(this)">Budget</div>
+            <div class="tab" data-url="/user/transaction" onclick="navigateToTab(this)">Transaction</div>
+        </div>
+        <div class="main-content">
+            <div class="sections">
+                <div class="transaction-section">
+                    <p class="box transaction-header">Transactions</p>
+                    <div class="header">
+                        <!--       Drop down       -->
+                        <div class="form">
+                            <form class="box" method="get" action="#">
+                                <select name="month" id="monthSelect">
+                                    <option value="00">All</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06" selected>June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </form>
+                        </div>
+                        <!--       Buttons       -->
+                        <div class="btn-row" id="actionButtons" style="display: none;">
+                            <div class="box">Add
+                                <span><i id="addNewGroupBtn"
+                                         class="box btn fa-solid fa-pen-to-square"></i></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="table-container box">
+                        <table class="table" id="transaction-table">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Note</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Amount (RM)</th>
+                                <th>Payment Method</th>
+                            </tr>
+                            </thead>
+                            <tbody id="transactionTableBody">
+                            <!-- Rows will be inserted here dynamically -->
+                            <!--                            <tr th:each="transaction, stat : ${transactions}">-->
+                            <!--                                <td th:text="${stat.count}">1</td>-->
+                            <!--                                <td th:text="${transaction.note}">Note</td>-->
+                            <!--                                <td th:text="${transaction.group.category}">Category</td>-->
+                            <!--                                <td th:text="${transaction.date}">Date</td>-->
+                            <!--                                <td th:text="${transaction.amount}">Amount</td>-->
+                            <!--                                <td th:text="${transaction.paymentMethod}">Payment Method</td>-->
+                            <!--                            </tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="budget-section">
+                    <p class="budget-header box">Budget Left</p>
+                    <div class="budget-table-container box">
+                        <table class="table">
+                            <thead>
+                            <tr>
+
+                                <th>Category</th>
+                                <th>Amount</th>
+                            </tr>
+                            </thead>
+                            <tbody id="groupTableBody">
+                            <!-- Rows will be inserted here dynamically -->
+                            <!--                            <tr th:each="group : ${groups}">-->
+                            <!--                                <td th:text="${group.budgetId}"></td>-->
+                            <!--                                <td th:text="${group.category}"></td>-->
+                            <!--                                <td th:text="'RM ' + ${budgetLeft[group.budgetId]}"></td>-->
+                            <!--                            </tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- The Modal -->
+            <div id="addModal" class="modal">
+                <div class="modal-content">
+                    <form id="transactionForm" th:action="@{/user/transaction/save}" th:object="${transaction}" method="post">
+                        <p class="box modal-title">Add Transaction</p>
+                        <input type="hidden" id="transactionId" th:field="*{transactionId}">
+                        <div class="mb-3">
+                            <label for="note" class="form-label">Note</label>
+                            <input type="text" class="form-control" id="note" th:field="*{note}" required>
+                            <span th:if="${#fields.hasErrors('note')}" th:errors="*{note}" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-select" id="category" th:field="*{group.budgetId}" required>
+                                <option value=""> Choose Category... </option>
+                                <option th:each="group : ${groups}" th:value="${group.budgetId}" th:text="${group.category}"></option>
+                            </select>
+                            <span th:if="${#fields.hasErrors('group.budgetId')}" th:errors="*{group.budgetId}" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="date" class="form-label">Date</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button type="button" id="toggle" class="input-group-text">
+                                        <i class="fa fa-calendar-alt"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control" id="date" th:field="*{date}" placeholder="dd/mm/yyyy" required>
+                            </div>
+                            <span th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Amount (RM)</label>
+                            <input type="number" class="form-control" id="amount" th:field="*{amount}" required>
+                            <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="paymentMethod" class="form-label">Payment Method</label>
+                            <select class="form-select" id="paymentMethod" th:field="*{paymentMethod}" required>
+                                <option value="Cash">Cash</option>
+                                <option value="Card">Card</option>
+                            </select>
+                            <span th:if="${#fields.hasErrors('paymentMethod')}" th:errors="*{paymentMethod}" class="text-danger"></span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="box btn btn-danger" id="deleteButton" style="display:none;">Delete</button>
+                            <button type="submit" class="box btn" id="saveButton">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
+        integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+        integrity="sha512-AIOTidJAcHBH2G/oZv9viEGXRqDNmfdPVPYOYKGy3fti0xIplnlgMHUGfuNRzC6FkzIo0iIxgFnr9RikFxK+sw=="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"
+        integrity="sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ=="
+        crossorigin="anonymous"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // Highlight the current tab based on URL
+        let currentUrl = window.location.href;
+        document.querySelectorAll('.tab').forEach(tab => {
+            if (currentUrl.includes(tab.getAttribute('data-url'))) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
+            }
+        });
+
+        const monthSelect = document.getElementById('monthSelect');
+        const actionButtons = document.getElementById('actionButtons');
+        const categorySelect = document.getElementById('category');
+
+        function fetchAndDisplayRows(month) {
+            console.log('Fetching data for month:', month); // Debug
+            fetch(`/user/budget/category?month=${month}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(groupData => {
+                    console.log('Fetched data:', groupData); // Debug
+                    const groupTableBody = document.getElementById('groupTableBody');
+                    groupTableBody.innerHTML = ''; // Clear the existing table rows
+
+                    const categories = [];
+                    const amounts = [];
+                    // let totalCategoryAmount = 0;
+
+                    if (groupData.length === 0) {
+                        // Display a message if no budgets are found
+                        const row = document.createElement('tr');
+                        row.innerHTML = `<td colspan="3" style="text-align: center;">No budgets</td>`;
+                        groupTableBody.appendChild(row);
+                    }
+                    if (groupData.length !== 0 || month === '06') {
+                        groupData.forEach((group) => {
+                            categories.push(group.category);
+                            amounts.push(group.bamount);
+
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                            <td>${group.category}</td>
+                            <td>${group.budgetLeft}</td>
+                        `;
+                            groupTableBody.appendChild(row);
+                        });
+
+                        // Update category select options
+                        categorySelect.innerHTML = ''; // Clear existing options
+                        categorySelect.innerHTML = `<option value=""> Choose Category... </option>`;
+                        groupData.forEach((group) => {
+                            const option = document.createElement('option');
+                            option.value = group.budgetId;
+                            option.textContent = group.category;
+                            categorySelect.appendChild(option);
+                        });
+                    }
+
+                    // Fetch and display transactions
+                    fetch(`/user/transaction/category?month=${month}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(transactionData => {
+                            console.log('Fetched transaction data:', transactionData); // Debug
+                            const transactionTableBody = document.getElementById('transactionTableBody');
+                            transactionTableBody.innerHTML = ''; // Clear existing rows
+
+                            if (transactionData.length === 0) {
+                                // Display a message if no budgets are found
+                                const row = document.createElement('tr');
+                                row.innerHTML = `<td colspan="6" style="text-align: center;">No Transactions</td>`;
+                                transactionTableBody.appendChild(row);
+                            }
+                            if (transactionData.length !== 0 || month === '06') {
+                                transactionData.forEach((transaction, index) => {
+                                    const row = document.createElement('tr');
+                                    row.setAttribute('data-id', transaction.transactionId); // Ensure correct transaction ID is set
+                                    row.innerHTML = `
+                                      <td>${index + 1}</td>
+                                      <td>${transaction.note}</td>
+                                      <td>${transaction.group.category}</td>
+                                      <td>${transaction.date}</td>
+                                      <td>${transaction.amount}</td>
+                                      <td>${transaction.paymentMethod}</td>
+                                `;
+                                    row.addEventListener('click', () => openEditModal(transaction));
+                                    transactionTableBody.appendChild(row);
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching transaction data:', error); // Debug
+                        });
+
+                    if (month === '06') { // Only show buttons for June
+                        actionButtons.style.display = 'flex';
+                    } else {
+                        actionButtons.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching budget data:', error); // Debug
+                });
+        }
+
+        monthSelect.addEventListener('change', function () {
+            const selectedMonth = this.value;
+            fetchAndDisplayRows(selectedMonth);
+        });
+
+        // Fetch and display groups for the initial selected month on page load
+        const initialMonth = monthSelect.value;
+        fetchAndDisplayRows(initialMonth);
+
+        // -------------  Modal related code ------------------ //
+        // ------ Add modal
+
+        const modal = document.getElementById("addModal");// Get the modal
+        const addNewGroupBtn = document.getElementById("addNewGroupBtn");// Get the button that opens the modal
+        const saveBtn = document.getElementById("saveButton");// Get the save button
+
+        const deleteBtn = document.getElementById("deleteButton"); // Get the delete button
+        const transactionForm = document.getElementById("transactionForm"); // Get the form
+
+        // When the user clicks the add button, open the modal
+        addNewGroupBtn.addEventListener("click", function () {
+            openEditModal(); // Call the function with no arguments to reset the form
+        });
+
+        // saveBtn.addEventListener("click", function (event) {
+        //     event.preventDefault(); // Prevent default form submission
+        //     if (saveBtn.textContent === 'Save') {
+        //         // Handle add new transaction
+        //         transactionForm.action = "/user/transaction/save";
+        //     } else {
+        //         // Handle edit transaction
+        //         transactionForm.action = "/user/transaction/update";
+        //     }
+        //     transactionForm.submit();
+        // });
+        //
+        // deleteBtn.addEventListener("click", function () {
+        //     const transactionId = document.getElementById("transactionId").value;
+        //     fetch(`/user/transaction/delete/${transactionId}`, {
+        //         method: 'DELETE'
+        //     })
+        //         .then(response => {
+        //             if (response.ok) {
+        //                 window.location.reload();
+        //             } else {
+        //                 alert('Failed to delete transaction');
+        //             }
+        //         });
+        // });
+        //
+        // // When the user clicks anywhere outside the modal, close it
+        // window.addEventListener("click", function (event) {
+        //     if (event.target === modal) {
+        //         modal.style.display = "none";
+        //     }
+        // });
+
+        // ---- Update & Delete Modal
+        function openEditModal(transaction = null) {
+            const modalTitle = document.querySelector('.modal-title'); // Select the modal title element
+
+            if (transaction) {
+                // Fill form fields with transaction data for editing
+                document.getElementById('transactionId').value = transaction.transactionId;
+                document.getElementById('note').value = transaction.note;
+                document.getElementById('category').value = transaction.group.budgetId;
+                document.getElementById('date').value = transaction.date;
+                document.getElementById('amount').value = transaction.amount;
+                document.getElementById('paymentMethod').value = transaction.paymentMethod;
+
+                // Change title
+                modalTitle.textContent = 'Edit or Delete Transaction';
+
+                saveBtn.textContent = 'Update';
+                deleteBtn.style.display = 'inline-block';
+            } else {
+                // Clear form fields for adding new transaction
+                transactionForm.reset();
+                document.getElementById('transactionId').value = '';
+
+                // Change title
+                modalTitle.textContent = 'Add Transaction';
+
+                saveBtn.textContent = 'Save';
+                deleteBtn.style.display = 'none';
+            }
+            modal.style.display = 'block';
+        }
+
+        saveBtn.addEventListener("click", function (event) {
+            if (saveBtn.textContent === 'Save') {
+                // Handle add new transaction
+                transactionForm.action = "/user/transaction/save";
+            } else {
+                // Handle edit transaction
+                transactionForm.action = "/user/transaction/update";
+            }
+        });
+
+        deleteBtn.addEventListener("click", function () {
+            const transactionId = document.getElementById("transactionId").value;
+            if (confirm('Are you sure you want to delete this transaction?')) { // Confirmation before performing delete
+                window.location.href = `/user/transaction/delete/${transactionId}`;
+            }
+        });
+
+        // When the user clicks anywhere outside the modal, close it
+        window.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    });
+
+    // Initialize date picker
+    $(function () {
+        var today = new Date();
+        var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+        var lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+        $('#date').datetimepicker({
+            format: 'd-m-Y',
+            formatDate: 'd-m-Y',
+            minDate: firstDay,
+            maxDate: lastDay,
+            onShow: true,
+            timepicker: false
+        });
+    });
+
+    function navigateToTab(element) {
+        const url = element.getAttribute('data-url');
+        window.location.href = url;
+    }
+
+    function navigateToDashboard(element) {
+        const url = element.getAttribute('data-url');
+        window.location.href = url;
+    }
+
+</script>
+</body>
+</html>

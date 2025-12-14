@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- The Modal -->
+<div id="transactionModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="transactionForm" th:action="@{/user/transaction/save}" th:object="${transaction}" method="post">
+            <input type="hidden" id="transactionId" th:field="*{transactionId}">
+            <div class="mb-3">
+                <label for="note" class="form-label">Note</label>
+                <input type="text" class="form-control" id="note" th:field="*{note}" required>
+                <span th:if="${#fields.hasErrors('note')}" th:errors="*{note}" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" id="category" th:field="*{group.budgetId}" required>
+                    <option value=""> Choose Category... </option>
+                    <option th:each="group : ${groups}" th:value="${group.budgetId}" th:text="${group.category}"></option>
+                </select>
+                <span th:if="${#fields.hasErrors('group.budgetId')}" th:errors="*{group.budgetId}" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" class="form-control" id="date" th:field="*{date}" required>
+                <span th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="amount" class="form-label">Amount (RM)</label>
+                <input type="number" class="form-control" id="amount" th:field="*{amount}" required>
+                <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="paymentMethod" class="form-label">Payment Method</label>
+                <select class="form-select" id="paymentMethod" th:field="*{paymentMethod}" required>
+                    <option value="Cash">Cash</option>
+                    <option value="Card">Card</option>
+                </select>
+                <span th:if="${#fields.hasErrors('paymentMethod')}" th:errors="*{paymentMethod}" class="text-danger"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="deleteButton">Delete</button>
+                <button type="submit" class="btn btn-primary" id="saveButton">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

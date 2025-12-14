@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+:root {
+    --body-font: 'Inter', sans-serif;
+    --navbar-font: 'Poppins', sans-serif;
+    --background-color: #A6B2DD;
+    --purple: #4455A2;
+    --light-purple: #ECECF8;
+    --pink: #FCDDEC;
+    --gray: #D9D9D9;
+    --shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.3); /* Shadow only at the bottom */
+}
+body {
+    font-family: var(--body-font);
+    background-color: var(--background-color);
+}
+.container {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+.content {
+    flex: 1;
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.navbar {
+    font-family: var(--navbar-font);
+    display: flex;
+}
+.navbar, .logo{
+    flex: 1;
+}
+.logo img {
+    width: 50px;
+    height: 50px;
+}
+.tab {
+    margin: 0 10px;
+    padding: 12px 30px;
+    border-radius: 30px;
+    cursor: pointer;
+    color: black;
+    background-color: white;
+}
+.tab.active, .tab:hover {
+    background-color: var(--pink);
+}
+.profile-section {
+    display: grid;
+    grid-template-columns: 10% 90%;
+    text-align: center;
+    padding: 20px 20px 20px 0;
+}
+.icon img {
+    width: 190px;
+    height: 190px;
+    position: relative;
+}
+.details {
+    padding-top: 40px;
+}
+.col-grid-1, .col-grid-2{
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px
+}
+.col-grid-1{
+    padding-left: 10%;
+    padding-right: 10%;
+    gap: 30px;
+}
+.row-grid{
+    display: grid;
+    grid-template-rows: auto auto;
+    gap: 30px;
+}
+.header{
+    padding-bottom: 40px;
+}
+.name-container {
+    display: flex;
+    gap: 15px;
+}
+.name-container div, .name-container .form-group {
+    flex: 1;
+    min-width: calc(50% - 10px);
+}
+.name-container .form-group {
+    gap: 30px;
+}
+.box {
+    color: var(--purple);
+    background-color: white;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 15px;
+    border: 1px solid var(--gray);
+    box-shadow: var(--shadow);
+}
+.profile-name{
+    font-size: 24px;
+}
+p, .p1{
+    font-weight: 500;
+}
+.p1{
+    color: gray;
+    padding-top: 10px;
+}
+.general-info, .account-info {
+    background-color: var(--light-purple);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray);
+}
+.info{
+    text-align: left;
+    padding-left: 50px;
+}
+.export-btn, .edit-btn {
+    color: black;
+    background-color: var(--light-purple);
+    padding: 10px 20px;
+    margin-left: 15px;
+    cursor: pointer;
+}
+.export-btn:hover, .edit-btn:hover {
+    background-color: #d4d7e8;
+}
+/*.edit .box .box{*/
+/*    padding: 14px;*/
+/*}*/
+/*.edit i{*/
+/*    font-size: 20px;*/
+/*}*/
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: white;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+.form-group {
+    padding-bottom: 15px;
+}
+.modal-body .box {
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+}
+.modal-content {
+    font-size: 18px;
+}
+.name-container {
+    display: flex;
+    gap: 15px;
+}
+.name-container input {
+    flex: 1;
+    min-width: calc(50% - 10px);
+}
