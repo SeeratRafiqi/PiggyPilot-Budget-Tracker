@@ -1,10 +1,17 @@
-# 🐷 PiggyPilot – Financial Data Tracker & Dashboard
+# 🐷 PiggyPilot – Budget Monitoring Web Application
 
 ### A full-stack budget monitoring system designed to promote financial discipline through data tracking and visualization.
 
 **PiggyPilot** helps users manage their personal finances by allowing them to set monthly budget caps, log transaction data, and visualize their spending habits through a real-time dashboard. Built with a robust **relational database (MySQL)** and a Spring Boot backend.
 
 ---
+## 👥 Contributors
+This project was a collaborative group effort developed by:
+
+* **Seerat Rafiqi**
+* **Aminah**
+* **Ikram**
+* **Kayla**
 
 ## 🏛️ System Architecture (MVC)
 The application follows a strict **Model-View-Controller** pattern to ensure separation of concerns:
